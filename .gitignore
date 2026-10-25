@@ -1,0 +1,35 @@
+# Odvisnosti
+node_modules/
+.pnpm-store/
+
+# Next.js in gradnja
+.next/
+out/
+build/
+dist/
+*.tsbuildinfo
+next-env.d.ts
+
+# Okoljske spremenljivke
+.env
+.env.*
+!.env.example
+
+# Testi
+coverage/
+
+*.log
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Lokalni podatki Dockerja
+postgres-data/
+
+# Sistem in urejevalniki
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
