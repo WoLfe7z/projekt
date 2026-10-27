@@ -12,7 +12,7 @@ Aplikacija in worker morata brati in pisati podatke v PostgreSQL, shema baze pa 
 
 ## Odločitev
 
-Izbrana možnost: »Prisma ORM s Prisma Migrate«, ker ima shemo na enem mestu (`schema.prisma`), iz nje generira tipe za TypeScript in migracije, podpira transakcije in ima uradno podporo v Better Auth. Drizzle je enakovredna izbira, a ima manj gradiva za začetnike. Čisti SQL bi pomenil več ponavljajoče se kode in ročno usklajevanje tipov.
+Izbrana možnost: Prisma ORM s Prisma Migrate. Ker ima shemo na enem mestu (`schema.prisma`), iz nje generira tipe za TypeScript in migracije, podpira transakcije in ima uradno podporo v Better Auth. Drizzle je enakovredna izbira, a ima manj gradiva za začetnike. Čisti SQL bi pomenil več ponavljajoče se kode in ročno usklajevanje tipov.
 
 ### Posledice
 

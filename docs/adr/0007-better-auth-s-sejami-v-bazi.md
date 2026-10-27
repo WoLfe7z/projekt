@@ -13,7 +13,7 @@ Uporabniki se prijavljajo z e-pošto in geslom, sistem pa pozna tri vloge (mened
 
 ## Odločitev
 
-Izbrana možnost: »Better Auth s sejami v bazi«, ker podpira prijavo z e-pošto in geslom, deluje s Prismo in omogoča dodatno polje za vlogo uporabnika. Seje so shranjene v bazi, zato ob blokadi uporabnika izbrišemo njegove seje in je takoj odjavljen, kar pri JWT brez dodatne logike ni mogoče. Auth.js se vzdržuje le še z varnostnimi popravki, zunanje storitve pa so plačljive in dodajo odvisnost od tretje strani.
+Izbrana možnost: Better Auth s sejami v bazi, ker podpira prijavo z e-pošto in geslom, deluje s Prismo in omogoča dodatno polje za vlogo uporabnika. Seje so shranjene v bazi, zato ob blokadi uporabnika izbrišemo njegove seje in je takoj odjavljen, kar pri JWT brez dodatne logike ni mogoče. Auth.js se vzdržuje le še z varnostnimi popravki, zunanje storitve pa so plačljive in dodajo odvisnost od tretje strani.
 
 ### Posledice
 
