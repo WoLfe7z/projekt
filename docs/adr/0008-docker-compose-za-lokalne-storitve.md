@@ -12,7 +12,7 @@ Za lokalni razvoj potrebujemo PostgreSQL in strežnik za e-pošto, s katerim lah
 
 ## Odločitev
 
-Izbrana možnost: »Docker Compose za PostgreSQL in Mailpit, aplikacija lokalno«, ker storitvi z ustaljeno različico tečeta v vsebnikih, Next.js pa teče neposredno na računalniku, kjer je hitro osveževanje kode ob spremembah najzanesljivejše. Lokalna namestitev PostgreSQL vodi do različnih različic in nastavitev, pravi SMTP pa bi med testiranjem pošiljal prava sporočila.
+Izbrana možnost: Docker Compose za PostgreSQL in Mailpit, aplikacija lokalno. Ker storitvi z ustaljeno različico tečeta v vsebnikih, Next.js pa teče neposredno na računalniku, kjer je hitro osveževanje kode ob spremembah najzanesljivejše. Lokalna namestitev PostgreSQL vodi do različnih različic in nastavitev, pravi SMTP pa bi med testiranjem pošiljal prava sporočila.
 
 ### Posledice
 

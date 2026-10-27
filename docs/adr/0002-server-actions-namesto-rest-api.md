@@ -22,4 +22,4 @@ Izbrana možnost: Server Actions. Ker obrazec neposredno pokliče strežniško f
 
 ## Dodatne informacije
 
-Povezano: ADR-0001, ADR-0007 (preverjanje seje in vloge).
+Povezano: ADR-0007 (preverjanje seje in vloge).

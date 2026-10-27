@@ -12,7 +12,7 @@ Nekatera opravila se morajo izvajati ob določenem času, ne glede na to, ali je
 
 ## Odločitev
 
-Izbrana možnost: »Ločen proces Node.js z `node-cron`«, ker opravila tečejo neodvisno od zahtevkov uporabnikov in uporabljajo isto poslovno logiko iz `backend/`. `setInterval` v procesu Next.js ni zanesljiv (ob ponovnem zagonu ali več instancah se opravila podvojijo ali izgubijo). Zunanji cron je odvisen od zunanje storitve, ki je lokalno ni.
+Izbrana možnost: Ločen proces Node.js z `node-cron`, ker opravila tečejo neodvisno od zahtevkov uporabnikov in uporabljajo isto poslovno logiko iz `backend/`. `setInterval` v procesu Next.js ni zanesljiv (ob ponovnem zagonu ali več instancah se opravila podvojijo ali izgubijo). Zunanji cron je odvisen od zunanje storitve, ki je lokalno ni.
 
 ### Posledice
 
