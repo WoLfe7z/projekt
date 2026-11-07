@@ -1,0 +1,8 @@
+{
+  "name": "prvihxi",
+  "private": true,
+  "scripts": {
+    "dev": "pnpm --filter frontend dev",
+    "build": "pnpm --filter frontend build"
+  }
+}
