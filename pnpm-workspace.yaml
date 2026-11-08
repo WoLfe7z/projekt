@@ -2,6 +2,9 @@ packages:
   - frontend
   - backend
 
-ignoredBuiltDependencies:
-  - sharp
-  - unrs-resolver
+# katerim paketom pnpm dovoli, da ob namestitvi zaženejo svoje skripte
+allowBuilds:
+  "@prisma/engines": true
+  prisma: true
+  sharp: false
+  unrs-resolver: false
