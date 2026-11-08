@@ -1,0 +1,22 @@
+services:
+  db:
+    image: postgres:17-alpine
+    container_name: prvihxi-db
+    environment:
+      POSTGRES_USER: prvihxi
+      POSTGRES_PASSWORD: prvihxi
+      POSTGRES_DB: prvihxi
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
+  mailpit:
+    image: axllent/mailpit
+    container_name: prvihxi-mailpit
+    ports:
+      - "1025:1025" # SMTP
+      - "8025:8025" # spletni vmesnik: http://localhost:8025
+
+volumes:
+  postgres-data:
