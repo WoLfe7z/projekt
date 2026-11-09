@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "backend": "workspace:*",
+    "better-auth": "1.7.18",
     "next": "16.4.5",
     "react": "19.3.0",
     "react-dom": "19.3.0"
@@ -18,6 +19,7 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "dotenv": "^17",
     "tailwindcss": "^4",
     "typescript": "^5"
   }
