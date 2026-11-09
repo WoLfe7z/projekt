@@ -6,7 +6,8 @@
   "types": "src/index.ts",
   "exports": {
     ".": "./src/index.ts",
-    "./db": "./src/db.ts"
+    "./db": "./src/db.ts",
+    "./auth": "./src/auth.ts"
   },
   "scripts": {
     "db:migrate": "prisma migrate dev",
@@ -15,7 +16,8 @@
   },
   "dependencies": {
     "@prisma/adapter-pg": "7.10.1",
-    "@prisma/client": "7.10.1"
+    "@prisma/client": "7.10.1",
+    "better-auth": "1.7.18"
   },
   "devDependencies": {
     "dotenv": "^17",
