@@ -36,3 +36,9 @@ Thumbs.db
 .idea/
 .vscode/
 *.swp
+
+# Navodila za AI-orodja, ki jih ustvari Prisma
+.agents/
+.claude/
+.windsurf/
+skills-lock.json
