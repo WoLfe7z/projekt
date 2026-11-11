@@ -27,6 +27,7 @@ model User {
   updatedAt     DateTime  @updatedAt
   sessions      Session[]
   accounts      Account[]
+  mostvo        Mostvo?
 
   @@map("uporabnik")
 }
@@ -76,4 +77,71 @@ model Verification {
 
   @@index([identifier])
   @@map("verification")
+}
+
+// ---------- klubi in nogometaši ----------
+
+enum Pozicija {
+  VR // vratar
+  OB // branilec
+  VE // vezist
+  NA // napadalec
+}
+
+enum StatusNogometasa {
+  na_voljo
+  poskodovan
+  kaznovan
+}
+
+model Klub {
+  id         String      @id @default(uuid())
+  naziv      String      @unique
+  kratica    String      @unique
+  nogometasi Nogometas[]
+
+  @@map("klub")
+}
+
+model Nogometas {
+  id        String            @id @default(uuid())
+  klubId    String            @map("klub_id")
+  klub      Klub              @relation(fields: [klubId], references: [id])
+  ime       String
+  priimek   String
+  pozicija  Pozicija
+  cena      Decimal           @db.Decimal(4, 1) // v mio, npr. 7.5
+  status    StatusNogometasa  @default(na_voljo)
+  zunanjiId Int?              @unique @map("zunanji_id") // ID v zunanjem API-ju
+  mostva    MostvoNogometas[]
+
+  @@index([klubId])
+  @@map("nogometas")
+}
+
+// ---------- fantasy moštvo ----------
+
+model Mostvo {
+  id          String            @id @default(uuid())
+  uporabnikId String            @unique @map("uporabnik_id") // en uporabnik ima največ eno moštvo
+  uporabnik   User              @relation(fields: [uporabnikId], references: [id], onDelete: Cascade)
+  ime         String
+  proracun    Decimal           @default(100.0) @db.Decimal(4, 1) // preostanek proračuna v mio
+  skupneTocke Int               @default(0) @map("skupne_tocke")
+  createdAt   DateTime          @default(now())
+  nogometasi  MostvoNogometas[]
+
+  @@map("mostvo")
+}
+
+// vmesna tabela: 15 nogometašev v moštvu
+model MostvoNogometas {
+  mostvoId    String    @map("mostvo_id")
+  nogometasId String    @map("nogometas_id")
+  mostvo      Mostvo    @relation(fields: [mostvoId], references: [id], onDelete: Cascade)
+  nogometas   Nogometas @relation(fields: [nogometasId], references: [id])
+
+  @@id([mostvoId, nogometasId])
+  @@index([nogometasId])
+  @@map("mostvo_nogometas")
 }
