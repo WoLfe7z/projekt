@@ -24,6 +24,70 @@ projekt/
 └── docs/       # dokumentacija projekta
 ```
 
+## Lokalni zagon
+
+### Predpogoji
+
+- [Node.js](https://nodejs.org) 20.9 ali novejši (priporočen je 24 LTS)
+- [pnpm](https://pnpm.io): `npm install -g pnpm` ali `brew install pnpm`
+- [Docker Desktop](https://www.docker.com/products/docker-desktop/), ki mora med razvojem teči
+- Git
+
+### Prvi zagon
+
+```bash
+# 1. kloniraj repozitorij
+git clone https://github.com/WoLfe7z/projekt.git
+cd projekt
+
+# 2. nastavitve okolja (v .env zamenjaj BETTER_AUTH_SECRET)
+cp .env.example .env
+
+# 3. zaženi bazo PostgreSQL in Mailpit
+docker compose up -d
+
+# 4. namesti odvisnosti
+pnpm install
+
+# 5. ustvari tabele v bazi in Prisma Client
+pnpm db:migrate
+
+# 6. dodaj testne uporabnike
+pnpm db:seed
+
+# 7. zaženi aplikacijo
+pnpm dev
+```
+
+Aplikacija teče na http://localhost:3000, Mailpit (testna e-pošta) na http://localhost:8025.
+
+### Testni uporabniki
+
+Ustvari jih ukaz `pnpm db:seed`. Vsi imajo geslo `geslo1234` in so namenjeni samo lokalnemu razvoju.
+
+| E-pošta | Vloga |
+|---|---|
+| `menedzer@prvihxi.si` | menedžer |
+| `urednik@prvihxi.si` | urednik statistike |
+| `admin@prvihxi.si` | administrator |
+
+### Uporabni ukazi
+
+| Ukaz | Kaj naredi |
+|---|---|
+| `pnpm dev` | zažene aplikacijo v razvojnem načinu |
+| `pnpm db:migrate` | uporabi nove migracije (ob spremembi `schema.prisma` ustvari novo) |
+| `pnpm db:generate` | ponovno ustvari Prisma Client |
+| `pnpm db:seed` | doda testne uporabnike (ponovni zagon ne ustvari dvojnikov) |
+| `pnpm db:studio` | odpre pregled baze v brskalniku |
+| `docker compose down` | ustavi bazo in Mailpit (podatki ostanejo) |
+
+### Pogoste težave
+
+- **`Module not found: Can't resolve './generated/prisma/client'`**: Prisma Client še ni ustvarjen. Poženi `pnpm db:generate`.
+- **Napaka pri povezavi z bazo (`ECONNREFUSED` ali `Can't reach database server`)**: Docker Desktop ne teče ali baza ni zagnana. Poženi `docker compose up -d`.
+- **`zsh: command not found: pnpm`**: pnpm ni nameščen. Namesti ga z `npm install -g pnpm` ali `brew install pnpm` (pri Homebrew bo morda treba najprej potrditi licenco Xcode: `sudo xcodebuild -license accept`).
+
 ## Dokumentacija
 
 - [01 – Zasnova rešitve](docs/01-zasnova-resitve.md)
