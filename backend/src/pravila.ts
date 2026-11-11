@@ -2,6 +2,8 @@ export const PRAVILA = {
   proracun: 100, // v mio
   steviloIgralcev: 15,
   najvecIzKluba: 3,
+  imeNajmanj: 3, // znakov
+  imeNajvec: 30,
 };
 
 export type Pozicija = "VR" | "OB" | "VE" | "NA";
@@ -39,6 +41,14 @@ export function sestejCene(igralci: IzbraniIgralec[]): number {
 
 export function zapisiMio(znesek: number): string {
   return znesek.toFixed(1).replace(".", ",");
+}
+
+// Preveri ime moštva in vrne napako ali null, če je ime v redu.
+export function preveriImeMostva(ime: string): string | null {
+  const dolzina = ime.trim().length;
+  if (dolzina < PRAVILA.imeNajmanj || dolzina > PRAVILA.imeNajvec)
+    return `Ime moštva mora imeti od ${PRAVILA.imeNajmanj} do ${PRAVILA.imeNajvec} znakov.`;
+  return null;
 }
 
 // Preveri izbrane igralce in vrne seznam napak. Prazen seznam pomeni, da je moštvo veljavno.
