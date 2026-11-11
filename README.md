@@ -78,8 +78,9 @@ Ustvari jih ukaz `pnpm db:seed`. Vsi imajo geslo `geslo1234` in so namenjeni sam
 | `pnpm dev` | zažene aplikacijo v razvojnem načinu |
 | `pnpm db:migrate` | uporabi nove migracije (ob spremembi `schema.prisma` ustvari novo) |
 | `pnpm db:generate` | ponovno ustvari Prisma Client |
-| `pnpm db:seed` | doda testne uporabnike (ponovni zagon ne ustvari dvojnikov) |
+| `pnpm db:seed` | doda testne uporabnike, klube in nogometaše (ponovni zagon ne ustvari dvojnikov) |
 | `pnpm db:studio` | odpre pregled baze v brskalniku |
+| `pnpm test` | zažene teste (Vitest) |
 | `docker compose down` | ustavi bazo in Mailpit (podatki ostanejo) |
 
 ### Pogoste težave
