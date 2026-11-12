@@ -16,7 +16,7 @@ export const SESTAVA: Record<Pozicija, number> = {
   NA: 3,
 };
 
-const IMENA_POZICIJ: Record<Pozicija, string> = {
+export const IMENA_POZICIJ: Record<Pozicija, string> = {
   VR: "Vratarji",
   OB: "Branilci",
   VE: "Vezisti",
