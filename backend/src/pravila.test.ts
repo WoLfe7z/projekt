@@ -1,6 +1,6 @@
 // Testi za pravila sestave moštva. Zaženeš z: pnpm test
 import { describe, expect, it } from "vitest";
-import { preveriMostvo, sestejCene, type IzbraniIgralec, type Pozicija } from "./pravila";
+import { preveriImeMostva, preveriMostvo, sestejCene, type IzbraniIgralec, type Pozicija } from "./pravila";
 
 // pomožna funkcija za hitro ustvarjanje igralca
 function igralec(id: string, pozicija: Pozicija, cena: number, klub: string): IzbraniIgralec {
@@ -132,5 +132,25 @@ describe("več napak hkrati", () => {
       "Vsota cen (114,0 mio) presega proračun 100,0 mio.",
       "Največ 3 igralci iz istega kluba (Olimpija: 4).",
     ]);
+  });
+});
+
+describe("ime moštva (3–30 znakov)", () => {
+  const napaka = "Ime moštva mora imeti od 3 do 30 znakov.";
+
+  it("dovoli 3 in 30 znakov", () => {
+    expect(preveriImeMostva("FC1")).toBeNull();
+    expect(preveriImeMostva("a".repeat(30))).toBeNull();
+  });
+
+  it("zavrne 2 in 31 znakov", () => {
+    expect(preveriImeMostva("FC")).toBe(napaka);
+    expect(preveriImeMostva("a".repeat(31))).toBe(napaka);
+  });
+
+  it("presledkov na začetku in koncu ne šteje", () => {
+    expect(preveriImeMostva("   ")).toBe(napaka);
+    expect(preveriImeMostva("  FC  ")).toBe(napaka);
+    expect(preveriImeMostva("  Zmaji  ")).toBeNull();
   });
 });
