@@ -16,3 +16,11 @@ export function izracunajRok(zacetkiTekem: Date[]): Date {
 
   return new Date(prva.getTime() - URE_PRED_PRVO_TEKMO * 60 * 60 * 1000);
 }
+
+export function jeRokPotekel(rok: Date, zdaj: Date = new Date()): boolean {
+  return zdaj >= rok;
+}
+
+export function preveriRok(rok: Date, zdaj: Date = new Date()): string | null {
+  return jeRokPotekel(rok, zdaj) ? "Rok za ta krog je potekel." : null;
+}
