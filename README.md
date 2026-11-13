@@ -52,7 +52,7 @@ pnpm install
 # 5. ustvari tabele v bazi in Prisma Client
 pnpm db:migrate
 
-# 6. dodaj testne uporabnike
+# 6. dodaj testne podatke (uporabniki, klubi, nogometaši, krogi)
 pnpm db:seed
 
 # 7. zaženi aplikacijo
@@ -71,6 +71,8 @@ Ustvari jih ukaz `pnpm db:seed`. Vsi imajo geslo `geslo1234` in so namenjeni sam
 | `urednik@prvihxi.si` | urednik statistike |
 | `admin@prvihxi.si` | administrator |
 
+Seed ustvari tudi razpored 9 krogov glede na datum zagona: 1. krog je bil prejšnji vikend (rok je že potekel), 2. krog je ta vikend, nato vsak teden en krog. Za svež razpored ponastavi bazo s `pnpm --filter backend exec prisma migrate reset` (izbriše vse podatke) in ponovno zaženi `pnpm db:seed`.
+
 ### Uporabni ukazi
 
 | Ukaz | Kaj naredi |
@@ -78,7 +80,7 @@ Ustvari jih ukaz `pnpm db:seed`. Vsi imajo geslo `geslo1234` in so namenjeni sam
 | `pnpm dev` | zažene aplikacijo v razvojnem načinu |
 | `pnpm db:migrate` | uporabi nove migracije (ob spremembi `schema.prisma` ustvari novo) |
 | `pnpm db:generate` | ponovno ustvari Prisma Client |
-| `pnpm db:seed` | doda testne uporabnike, klube in nogometaše (ponovni zagon ne ustvari dvojnikov) |
+| `pnpm db:seed` | doda testne uporabnike, klube, nogometaše in razpored 9 krogov (ponovni zagon ne ustvari dvojnikov) |
 | `pnpm db:studio` | odpre pregled baze v brskalniku |
 | `pnpm test` | zažene teste (Vitest) |
 | `docker compose down` | ustavi bazo in Mailpit (podatki ostanejo) |
