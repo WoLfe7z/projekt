@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { prisma } from "backend/db";
 import { IMENA_POZICIJ, PRAVILA, zapisiMio, type Pozicija } from "backend";
 import { zahtevajUporabnika } from "@/lib/seja";
-import OdjavaGumb from "@/components/OdjavaGumb";
+import Glava from "@/components/Glava";
 import IgrisceMostva, { type IgralecNaIgriscu } from "@/components/IgrisceMostva";
 import IzbiraMostva, { type Igralec } from "./IzbiraMostva";
 
@@ -140,15 +140,7 @@ export default async function MostvoStran() {
 
   return (
     <>
-      <header className="bg-trava text-kreda">
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4 md:px-12">
-          <p className="font-display text-2xl font-bold tracking-wide">PrvihXI</p>
-          <div className="flex items-center gap-5">
-            <span className="text-sm text-kreda/80">{uporabnik.name}</span>
-            <OdjavaGumb />
-          </div>
-        </div>
-      </header>
+      <Glava ime={uporabnik.name} aktivna="/mostvo" />
       <main className="mx-auto max-w-6xl px-6 py-10 md:px-12">{vsebina}</main>
     </>
   );
