@@ -95,10 +95,12 @@ enum StatusNogometasa {
 }
 
 model Klub {
-  id         String      @id @default(uuid())
-  naziv      String      @unique
-  kratica    String      @unique
-  nogometasi Nogometas[]
+  id             String      @id @default(uuid())
+  naziv          String      @unique
+  kratica        String      @unique
+  nogometasi     Nogometas[]
+  domaceTekme    Tekma[]     @relation("domaci")
+  gostujoceTekme Tekma[]     @relation("gostje")
 
   @@map("klub")
 }
@@ -114,6 +116,7 @@ model Nogometas {
   status    StatusNogometasa  @default(na_voljo)
   zunanjiId Int?              @unique @map("zunanji_id") // ID v zunanjem API-ju
   mostva    MostvoNogometas[]
+  postave   Postava[]
 
   @@index([klubId])
   @@map("nogometas")
@@ -130,6 +133,7 @@ model Mostvo {
   skupneTocke Int               @default(0) @map("skupne_tocke")
   createdAt   DateTime          @default(now())
   nogometasi  MostvoNogometas[]
+  postave     Postava[]
 
   @@map("mostvo")
 }
@@ -144,4 +148,63 @@ model MostvoNogometas {
   @@id([mostvoId, nogometasId])
   @@index([nogometasId])
   @@map("mostvo_nogometas")
+}
+
+// ---------- krogi in tekme ----------
+
+model Krog {
+  id        String    @id @default(uuid())
+  stevilka  Int       @unique // 1–36
+  rok       DateTime // rok za spremembe postav: 1 ura pred prvo tekmo kroga
+  obracunan Boolean   @default(false)
+  tekme     Tekma[]
+  postave   Postava[]
+
+  @@map("krog")
+}
+
+enum StatusTekme {
+  napovedana
+  v_vnosu
+  potrjena
+}
+
+model Tekma {
+  id         String      @id @default(uuid())
+  krogId     String      @map("krog_id")
+  krog       Krog        @relation(fields: [krogId], references: [id])
+  domaciId   String      @map("domaci_id")
+  domaci     Klub        @relation("domaci", fields: [domaciId], references: [id])
+  gostjeId   String      @map("gostje_id")
+  gostje     Klub        @relation("gostje", fields: [gostjeId], references: [id])
+  zacetek    DateTime
+  goliDomaci Int?        @map("goli_domaci") // prazno, dokler urednik ne vnese rezultata
+  goliGostje Int?        @map("goli_gostje")
+  status     StatusTekme @default(napovedana)
+  zunanjiId  Int?        @unique @map("zunanji_id") // ID v zunanjem API-ju
+
+  @@index([krogId])
+  @@map("tekma")
+}
+
+// ---------- postava za krog ----------
+
+// en zapis na igralca: 15 zapisov na moštvo in krog
+model Postava {
+  id          String    @id @default(uuid())
+  mostvoId    String    @map("mostvo_id")
+  mostvo      Mostvo    @relation(fields: [mostvoId], references: [id], onDelete: Cascade)
+  krogId      String    @map("krog_id")
+  krog        Krog      @relation(fields: [krogId], references: [id])
+  nogometasId String    @map("nogometas_id")
+  nogometas   Nogometas @relation(fields: [nogometasId], references: [id])
+  mesto       Int // 1–11 začetna postava, 12–15 klop po vrstnem redu menjav
+  kapetan     Boolean   @default(false)
+  tocke       Int? // izpolni obračun kroga
+
+  @@unique([mostvoId, krogId, nogometasId]) // igralec je v postavi kroga samo enkrat
+  @@unique([mostvoId, krogId, mesto]) // vsako mesto je zasedeno samo enkrat
+  @@index([krogId])
+  @@index([nogometasId])
+  @@map("postava")
 }

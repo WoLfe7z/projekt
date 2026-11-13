@@ -1,10 +1,11 @@
-// Testni podatki: uporabniki, klubi Prve lige in nogometaši.
+// Testni podatki: uporabniki, klubi Prve lige, nogometaši in razpored krogov.
 // Zaženeš z: pnpm db:seed (ne ustvari dvojnikov)
 import { config } from "dotenv";
 config({ path: "../.env" });
 
 import { auth } from "../src/auth";
 import { prisma } from "../src/db";
+import { izracunajRok } from "../src/krog";
 import type { Pozicija } from "../src/generated/prisma/client";
 
 const geslo = "geslo1234";
@@ -104,9 +105,78 @@ async function ustvariKlubeInNogometase() {
   }
 }
 
+// Razpored: vsak klub igra z vsakim enkrat, 9 krogov po 5 tekem.
+const STEVILO_KROGOV = 9;
+
+const URE_TEKEM = [
+  { dan: 0, ura: 15, minute: 0 },
+  { dan: 0, ura: 17, minute: 30 },
+  { dan: 0, ura: 20, minute: 0 },
+  { dan: 1, ura: 15, minute: 0 },
+  { dan: 1, ura: 17, minute: 30 },
+];
+
+// sobota prejšnjega vikenda (če je danes sobota, je to sobota pred tednom)
+function sobotaPrvegaKroga(): Date {
+  const danes = new Date();
+  const doNaslednjeSobote = (6 - danes.getDay() + 7) % 7 || 7;
+  return new Date(danes.getFullYear(), danes.getMonth(), danes.getDate() + doNaslednjeSobote - 7);
+}
+
+// pari za vse kroge po "krožni" metodi: prvi klub stoji, ostali se vsak krog zavrtijo za eno mesto
+function pariKrogov(klubIds: string[]): [string, string][][] {
+  const vrsta = [...klubIds];
+  const krogi: [string, string][][] = [];
+
+  for (let k = 0; k < vrsta.length - 1; k++) {
+    const pari: [string, string][] = [];
+    for (let i = 0; i < vrsta.length / 2; i++) {
+      const a = vrsta[i];
+      const b = vrsta[vrsta.length - 1 - i];
+      // izmenično doma in v gosteh, da en klub ne igra vedno doma
+      pari.push(k % 2 === 0 ? [a, b] : [b, a]);
+    }
+    krogi.push(pari);
+    // zavrtimo vse razen prvega
+    vrsta.splice(1, 0, vrsta.pop()!);
+  }
+  return krogi;
+}
+
+async function ustvariKroge() {
+  if ((await prisma.krog.count()) > 0) {
+    console.log("obstaja: razpored krogov");
+    return;
+  }
+
+  const klubIds = (await prisma.klub.findMany({ orderBy: { naziv: "asc" } })).map((k) => k.id);
+  const vsiPari = pariKrogov(klubIds);
+  const prvaSobota = sobotaPrvegaKroga();
+
+  for (let k = 0; k < STEVILO_KROGOV; k++) {
+    const tekme = vsiPari[k].map(([domaciId, gostjeId], i) => {
+      const cas = URE_TEKEM[i];
+      const zacetek = new Date(prvaSobota);
+      zacetek.setDate(prvaSobota.getDate() + k * 7 + cas.dan);
+      zacetek.setHours(cas.ura, cas.minute, 0, 0);
+      return { domaciId, gostjeId, zacetek };
+    });
+
+    await prisma.krog.create({
+      data: {
+        stevilka: k + 1,
+        rok: izracunajRok(tekme.map((t) => t.zacetek)),
+        tekme: { create: tekme },
+      },
+    });
+  }
+  console.log(`ustvarjen: razpored (${STEVILO_KROGOV} krogov, prvi ${prvaSobota.toLocaleDateString("sl-SI")})`);
+}
+
 async function main() {
   await ustvariUporabnike();
   await ustvariKlubeInNogometase();
+  await ustvariKroge();
 }
 
 main()
