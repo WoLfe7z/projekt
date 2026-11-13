@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { preveriPostavo, type IgralecVPostavi } from "./postava";
+import { opisFormacije, preveriPostavo, privzetaPostava, type IgralecVPostavi } from "./postava";
 import type { Pozicija } from "./pravila";
 
 function igralec(id: string, pozicija: Pozicija, mesto: number, kapetan = false): IgralecVPostavi {
@@ -136,5 +136,42 @@ describe("mesta in igralci", () => {
     const postava = veljavnaPostava();
     postava[14].id = "na1";
     expect(preveriPostavo(postava)).toContain("Isti igralec je v postavi večkrat.");
+  });
+});
+
+describe("opis formacije", () => {
+  it("4-4-2", () => {
+    expect(opisFormacije(veljavnaPostava())).toBe("4-4-2");
+  });
+
+  it("3-5-2 po zamenjavi branilca z vezistom s klopi", () => {
+    const postava = veljavnaPostava();
+    zamenjajMesti(postava, "ob4", "ve5");
+    expect(opisFormacije(postava)).toBe("3-5-2");
+  });
+});
+
+describe("privzeta postava", () => {
+  const mostvo = [
+    { id: "vr-a", pozicija: "VR" as const, cena: 5 },
+    { id: "vr-b", pozicija: "VR" as const, cena: 4 },
+    ...[8, 7, 6, 5, 4].map((cena, i) => ({ id: `ob-${i}`, pozicija: "OB" as const, cena })),
+    ...[9, 8, 7, 6, 4.5].map((cena, i) => ({ id: `ve-${i}`, pozicija: "VE" as const, cena })),
+    ...[12, 7, 5].map((cena, i) => ({ id: `na-${i}`, pozicija: "NA" as const, cena })),
+  ];
+  const postava = privzetaPostava(mostvo);
+
+  it("je veljavna 4-4-2", () => {
+    expect(preveriPostavo(postava)).toEqual([]);
+    expect(opisFormacije(postava)).toBe("4-4-2");
+  });
+
+  it("na klop da najcenejše, najprej vratarja", () => {
+    const klop = postava.filter((i) => i.mesto > 11).sort((a, b) => a.mesto - b.mesto);
+    expect(klop.map((i) => i.id)).toEqual(["vr-b", "ob-4", "ve-4", "na-2"]);
+  });
+
+  it("za kapetana izbere najdražjega začetnega igralca", () => {
+    expect(postava.find((i) => i.kapetan)?.id).toBe("na-0");
   });
 });
