@@ -92,3 +92,58 @@ export async function izvediPrestopVBazi(
     return { napake: [], brezplacen };
   });
 }
+
+export type IgralecZaPrestop = IzbraniIgralec & {
+  ime: string;
+  priimek: string;
+  kratica: string;
+  poskodovan: boolean;
+};
+
+export async function naloziPrestope(uporabnikId: string) {
+  const mostvo = await prisma.mostvo.findUnique({
+    where: { uporabnikId },
+    include: { nogometasi: true },
+  });
+  if (!mostvo)
+    return null;
+
+  const krog = await odprtKrog();
+  const vsi = await prisma.nogometas.findMany({
+    include: { klub: true },
+    orderBy: [{ cena: "desc" }, { priimek: "asc" }],
+  });
+
+  const igralci: IgralecZaPrestop[] = vsi.map((n) => ({
+    id: n.id,
+    ime: n.ime,
+    priimek: n.priimek,
+    pozicija: n.pozicija,
+    cena: Number(n.cena),
+    klub: n.klub.naziv,
+    kratica: n.klub.kratica,
+    poskodovan: n.status !== "na_voljo",
+  }));
+  const vMostvu = new Set(mostvo.nogometasi.map((mn) => mn.nogometasId));
+
+  const prestopi = krog
+    ? await prisma.prestop.findMany({
+        where: { mostvoId: mostvo.id, krogId: krog.id },
+        include: { ven: true, noter: true },
+        orderBy: { createdAt: "asc" },
+      })
+    : [];
+
+  return {
+    krog,
+    preostanek: Number(mostvo.proracun),
+    mojiIgralci: igralci.filter((i) => vMostvu.has(i.id)),
+    ostaliIgralci: igralci.filter((i) => !vMostvu.has(i.id)),
+    prestopi: prestopi.map((p) => ({
+      id: p.id,
+      ven: `${p.ven.ime} ${p.ven.priimek}`,
+      noter: `${p.noter.ime} ${p.noter.priimek}`,
+      brezplacen: p.brezplacen,
+    })),
+  };
+}
