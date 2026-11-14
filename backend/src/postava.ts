@@ -71,3 +71,26 @@ export function preveriPostavo(igralci: IgralecVPostavi[]): string[] {
 
   return napake;
 }
+
+export function opisFormacije(igralci: IgralecVPostavi[]): string {
+  const zacetni = igralci.filter((i) => jeZacetni(i.mesto));
+  const stevilo = (pozicija: Pozicija) => zacetni.filter((i) => i.pozicija === pozicija).length;
+  return `${stevilo("OB")}-${stevilo("VE")}-${stevilo("NA")}`;
+}
+
+// 4-4-2 iz najdražjih igralcev na vsaki poziciji, na klopi ostanejo najcenejši (najprej vratar), kapetan je najdražji začetni
+export function privzetaPostava(igralci: { id: string; pozicija: Pozicija; cena: number }[]): IgralecVPostavi[] {
+  const po = (pozicija: Pozicija) => igralci.filter((i) => i.pozicija === pozicija).sort((a, b) => b.cena - a.cena);
+  const [vr, ob, ve, na] = [po("VR"), po("OB"), po("VE"), po("NA")];
+
+  const zacetni = [vr[0], ...ob.slice(0, 4), ...ve.slice(0, 4), ...na.slice(0, 2)];
+  const klop = [vr[1], ob[4], ve[4], na[2]];
+  const kapetan = [...zacetni].sort((a, b) => b.cena - a.cena)[0];
+
+  return [...zacetni, ...klop].map((i, indeks) => ({
+    id: i.id,
+    pozicija: i.pozicija,
+    mesto: indeks + 1,
+    kapetan: i.id === kapetan.id,
+  }));
+}
