@@ -117,6 +117,8 @@ model Nogometas {
   zunanjiId Int?              @unique @map("zunanji_id") // ID v zunanjem API-ju
   mostva    MostvoNogometas[]
   postave   Postava[]
+  odhodi    Prestop[]         @relation("ven")
+  prihodi   Prestop[]         @relation("noter")
 
   @@index([klubId])
   @@map("nogometas")
@@ -134,6 +136,7 @@ model Mostvo {
   createdAt   DateTime          @default(now())
   nogometasi  MostvoNogometas[]
   postave     Postava[]
+  prestopi    Prestop[]
 
   @@map("mostvo")
 }
@@ -159,6 +162,7 @@ model Krog {
   obracunan Boolean   @default(false)
   tekme     Tekma[]
   postave   Postava[]
+  prestopi  Prestop[]
 
   @@map("krog")
 }
@@ -207,4 +211,23 @@ model Postava {
   @@index([krogId])
   @@index([nogometasId])
   @@map("postava")
+}
+
+// ---------- prestopi ----------
+
+model Prestop {
+  id         String    @id @default(uuid())
+  mostvoId   String    @map("mostvo_id")
+  mostvo     Mostvo    @relation(fields: [mostvoId], references: [id], onDelete: Cascade)
+  krogId     String    @map("krog_id")
+  krog       Krog      @relation(fields: [krogId], references: [id])
+  venId      String    @map("ven_id")
+  ven        Nogometas @relation("ven", fields: [venId], references: [id])
+  noterId    String    @map("noter_id")
+  noter      Nogometas @relation("noter", fields: [noterId], references: [id])
+  brezplacen Boolean // false pomeni -4 točke ob obračunu kroga
+  createdAt  DateTime  @default(now())
+
+  @@index([mostvoId, krogId])
+  @@map("prestop")
 }
