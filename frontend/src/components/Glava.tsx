@@ -4,6 +4,7 @@ import OdjavaGumb from "./OdjavaGumb";
 const POVEZAVE = [
   { href: "/mostvo", naziv: "Moje moštvo" },
   { href: "/postava", naziv: "Postava" },
+  { href: "/prestopi", naziv: "Prestopi" },
 ];
 
 export default function Glava({ ime, aktivna }: { ime: string; aktivna: string }) {
