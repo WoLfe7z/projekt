@@ -140,7 +140,7 @@ export default async function MostvoStran() {
 
   return (
     <>
-      <Glava ime={uporabnik.name} aktivna="/mostvo" />
+      <Glava ime={uporabnik.name} vloga={uporabnik.vloga} aktivna="/mostvo" />
       <main className="mx-auto max-w-6xl px-6 py-10 md:px-12">{vsebina}</main>
     </>
   );

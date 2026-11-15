@@ -10,7 +10,7 @@ export default async function PrijavaStran() {
   // prijavljen uporabnik nima kaj iskati na prijavi
   const seja = await auth.api.getSession({ headers: await headers() });
   if (seja && !seja.user.jeBlokiran)
-    redirect("/mostvo");
+    redirect("/");
 
   return (
     <>

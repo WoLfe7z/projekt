@@ -9,7 +9,7 @@ export const metadata: Metadata = { title: "Registracija | PrvihXI" };
 export default async function RegistracijaStran() {
   const seja = await auth.api.getSession({ headers: await headers() });
   if (seja && !seja.user.jeBlokiran)
-    redirect("/mostvo");
+    redirect("/");
 
   return (
     <>

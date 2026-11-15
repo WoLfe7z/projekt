@@ -1,21 +1,25 @@
 import Link from "next/link";
 import OdjavaGumb from "./OdjavaGumb";
 
-const POVEZAVE = [
+const POVEZAVE_MENEDZER = [
   { href: "/mostvo", naziv: "Moje moštvo" },
   { href: "/postava", naziv: "Postava" },
   { href: "/prestopi", naziv: "Prestopi" },
 ];
 
-export default function Glava({ ime, aktivna }: { ime: string; aktivna: string }) {
+const POVEZAVE_UREDNIK = [{ href: "/urednik/tekme", naziv: "Tekme" }];
+
+export default function Glava({ ime, vloga, aktivna }: { ime: string; vloga?: string; aktivna: string }) {
+  const povezave = vloga === "urednik" ? POVEZAVE_UREDNIK : POVEZAVE_MENEDZER;
+
   return (
     <header className="bg-trava text-kreda">
       <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-x-8 gap-y-2 px-6 py-4 md:px-12">
-        <Link href="/mostvo" className="font-display text-2xl font-bold tracking-wide">
+        <Link href="/" className="font-display text-2xl font-bold tracking-wide">
           PrvihXI
         </Link>
         <nav aria-label="Glavna navigacija" className="order-last flex w-full gap-6 sm:order-none sm:w-auto">
-          {POVEZAVE.map((p) => (
+          {povezave.map((p) => (
             <Link
               key={p.href}
               href={p.href}

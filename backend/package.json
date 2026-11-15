@@ -10,7 +10,8 @@
     "./auth": "./src/auth.ts",
     "./mostvo": "./src/mostvo.ts",
     "./postava-baza": "./src/postava-baza.ts",
-    "./prestop-baza": "./src/prestop-baza.ts"
+    "./prestop-baza": "./src/prestop-baza.ts",
+    "./tekma-baza": "./src/tekma-baza.ts"
   },
   "scripts": {
     "db:migrate": "prisma migrate dev",

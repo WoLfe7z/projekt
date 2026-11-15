@@ -71,7 +71,7 @@ export default async function PrestopiStran() {
 
   return (
     <>
-      <Glava ime={uporabnik.name} aktivna="/prestopi" />
+      <Glava ime={uporabnik.name} vloga={uporabnik.vloga} aktivna="/prestopi" />
       <main className="mx-auto max-w-6xl px-6 py-10 md:px-12">{vsebina}</main>
     </>
   );
