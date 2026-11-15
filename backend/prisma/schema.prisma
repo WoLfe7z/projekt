@@ -117,6 +117,7 @@ model Nogometas {
   zunanjiId Int?              @unique @map("zunanji_id") // ID v zunanjem API-ju
   mostva    MostvoNogometas[]
   postave   Postava[]
+  nastopi   Nastop[]
   odhodi    Prestop[]         @relation("ven")
   prihodi   Prestop[]         @relation("noter")
 
@@ -186,6 +187,7 @@ model Tekma {
   goliGostje Int?        @map("goli_gostje")
   status     StatusTekme @default(napovedana)
   zunanjiId  Int?        @unique @map("zunanji_id") // ID v zunanjem API-ju
+  nastopi    Nastop[]
 
   @@index([krogId])
   @@map("tekma")
@@ -230,4 +232,25 @@ model Prestop {
 
   @@index([mostvoId, krogId])
   @@map("prestop")
+}
+
+// ---------- statistika tekme ----------
+
+model Nastop {
+  id          String    @id @default(uuid())
+  tekmaId     String    @map("tekma_id")
+  tekma       Tekma     @relation(fields: [tekmaId], references: [id], onDelete: Cascade)
+  nogometasId String    @map("nogometas_id")
+  nogometas   Nogometas @relation(fields: [nogometasId], references: [id])
+  minute      Int       @default(0)
+  goli        Int       @default(0)
+  asistence   Int       @default(0)
+  avtogoli    Int       @default(0)
+  rumeni      Int       @default(0)
+  rdeci       Int       @default(0)
+  tocke       Int? // izračuna se ob potrditvi tekme
+
+  @@unique([tekmaId, nogometasId])
+  @@index([nogometasId])
+  @@map("nastop")
 }
