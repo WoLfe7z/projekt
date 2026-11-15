@@ -31,7 +31,7 @@ export default function PrijavaObrazec() {
       return;
     }
 
-    router.push("/mostvo");
+    router.push("/");
     router.refresh();
   }
 
