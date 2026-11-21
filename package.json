@@ -8,6 +8,13 @@
     "db:generate": "pnpm --filter backend db:generate",
     "db:seed": "pnpm --filter backend db:seed",
     "db:studio": "pnpm --filter backend db:studio",
-    "test": "pnpm --filter backend test"
+    "test": "pnpm --filter backend test && pnpm --filter frontend test",
+    "lint": "eslint frontend backend"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.15.0",
+    "globals": "^17.14.0",
+    "typescript-eslint": "^8.73.0"
   }
 }
